@@ -1,0 +1,8 @@
+/public/storage
+/vendor
+/.idea
+.env
+
+/docker/db
+
+composer.phar
