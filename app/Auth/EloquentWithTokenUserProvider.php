@@ -69,7 +69,7 @@ class EloquentWithTokenUserProvider extends EloquentUserProvider
             $tokenRow = $query->first();
 
             if ($tokenRow) {
-                return $this->retrieveById($tokenRow->value($this->modelTokensFieldUserId));
+                return $this->retrieveById($tokenRow->getOriginal($this->modelTokensFieldUserId));
             }
 
             return null;
