@@ -9,7 +9,8 @@
         "laravel/framework": "5.4.*",
         "laravel/socialite": "^3.0",
         "laravel/tinker": "~1.0",
-        "socialiteproviders/vkontakte": "^3.0"
+        "socialiteproviders/vkontakte": "^3.0",
+        "vladkens/vk": "^0.1.9"
     },
     "autoload": {
         "classmap": [

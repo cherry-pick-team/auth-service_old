@@ -54,5 +54,41 @@ Route::get('/auth/vk/redirect', function (Request $request) {
 // check user (via vk)
 Route::get('/auth/vk/check', function (Request $request) {
     $user = Socialite::driver('vkontakte')->user();
-    return '<pre>' . print_r($user, 1) . '</pre>';
+
+    return redirect()->route('vk-token', ['token' => $user->token, 'user' => $user->id,]);
 });
+
+Route::get('/auth/vk/token', function (Request $request) {
+    $token = $request->input('token');
+    $id = $request->input('user');
+
+    $vk = new \VK\VK(
+        config('services.vkontakte.client_id'),
+        config('services.vkontakte.client_secret'),
+        $token);
+
+    $userInfo = $vk->api('users.get', [
+        'uids' => $id,
+    ]);
+
+    $userData = $userInfo['response'][0];
+
+    $res = '<pre>';
+    $res .= $userData['first_name'] . ' ' . $userData['last_name'] . PHP_EOL . PHP_EOL;
+
+    $friendsInfo = $vk->api('friends.get', [
+        'uid' => $id,
+        'fields' => 'uid,first_name,last_name',
+        'order' => 'name',
+    ]);
+
+    $friendsList = $friendsInfo['response'];
+
+    foreach($friendsList as $friend) {
+        $res .= $friend['uid'] . '  ' . $friend['first_name'] . ' ' . $friend['last_name'] . PHP_EOL;
+    }
+
+    $res .= '</pre>';
+
+    return $res;
+})->name('vk-token');
